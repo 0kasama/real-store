@@ -1,4 +1,4 @@
-import { ref, watch, isRef } from 'vue';
+import { ref, watch, isRef, onMounted } from 'vue';
 import { BASE_URL } from '@/config/baseUrl';
 
 export function useFetch(endpoint, options = {}) {
@@ -29,10 +29,10 @@ export function useFetch(endpoint, options = {}) {
     }
   };
 
+  onMounted(fetchData);
+
   if (isRef(endpoint)) {
     watch(endpoint, fetchData);
-  } else {
-    fetchData();
   }
 
   return { data, error, isLoading };

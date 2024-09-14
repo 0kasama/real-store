@@ -16,6 +16,12 @@ export default {
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
       },
+      gridTemplateColumns: {
+        'detail': '40% 60%',
+      },
+      gridTemplateRows: {
+        'detail': '20% 10% 40% 10% 20%',
+      },
     },
   },
   plugins: [require('daisyui')],
