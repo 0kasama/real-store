@@ -37,6 +37,7 @@ export default {
           primary: '#003366',
           secondary: '#720060',
           accent: '#B88000',
+          neutral: '#3F3F3F',
         },
       },
     ],

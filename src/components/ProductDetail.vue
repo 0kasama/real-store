@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue';
 import { useFetch } from '@/composables/useFetch';
 import ProductNotFound from '@/components/ProductNotFound.vue';
+import ProductLoading from '@/components/ProductLoading.vue';
 
 const id = ref(1);
 const endpoint = ref(`/products/${id.value}`);
@@ -31,21 +32,21 @@ const prevProduct = () => {
   }
 };
 
-// const test = ref(null);
+const test = ref(null);
 
-// const testLoading = () => {
-//   test.value = 'loading';
-//   setTimeout(() => {
-//     test.value = null;
-//   }, 2000);
-// };
+const testLoading = () => {
+  test.value = 'loading';
+  setTimeout(() => {
+    test.value = null;
+  }, 2000);
+};
 
-// const testError = () => {
-//   test.value = 'error';
-//   setTimeout(() => {
-//     test.value = null;
-//   }, 2000);
-// };
+const testError = () => {
+  test.value = 'error';
+  setTimeout(() => {
+    test.value = null;
+  }, 2000);
+};
 </script>
 
 <template>
@@ -64,10 +65,10 @@ const prevProduct = () => {
     <div
       class="bg-white z-10 flex flex-col justify-center items-center w-[70vw] h-[80vh] p-10 rounded-xl shadow-xl"
     >
-      <div v-if="isLoading">Loading...</div>
+      <ProductLoading v-if="isLoading" />
 
       <ProductNotFound
-        v-if="error"
+        v-else-if="error"
         :error="error"
         :prevProduct="prevProduct"
         :nextProduct="nextProduct"
