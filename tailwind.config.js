@@ -12,15 +12,19 @@ export default {
         'jewel-secondary': '#fff5e1',
         electronic: '#006633',
         'electronic-secondary': '#e6ffe8',
+        'not-found': '#D8D7D7',
       },
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
       },
       gridTemplateColumns: {
-        'detail': '40% 60%',
+        detail: '40% 60%',
       },
       gridTemplateRows: {
-        'detail': '20% 10% 40% 10% 20%',
+        detail: '20% 10% 50% 10% 10%',
+      },
+      lineClamp: {
+        8: '8',
       },
     },
   },
@@ -32,7 +36,7 @@ export default {
           ...require('daisyui/src/theming/themes')['light'],
           primary: '#003366',
           secondary: '#720060',
-          accent: '#B89000',
+          accent: '#B88000',
         },
       },
     ],

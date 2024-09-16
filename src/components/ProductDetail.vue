@@ -8,6 +8,16 @@ const { data: product, error, isLoading } = useFetch(endpoint);
 
 watch(id, () => {
   endpoint.value = `/products/${id.value}`;
+  error.value = null;
+});
+
+watch(product, () => {
+  if (product.value) {
+    const category = product.value.category;
+    if (category !== "men's clothing" && category !== "women's clothing") {
+      error.value = 'Invalid category: Product not found.';
+    }
+  }
 });
 
 const nextProduct = () => {
@@ -39,19 +49,42 @@ const prevProduct = () => {
 
 <template>
   <main
-    class="bg-man-secondary flex justify-center items-center min-h-screen relative"
+    class="flex justify-center items-center min-h-screen relative"
+    :class="{
+      'bg-not-found':
+        !product ||
+        (product.category !== 'men\'s clothing' &&
+          product.category !== 'women\'s clothing'),
+      'bg-man-secondary': product && product.category === 'men\'s clothing',
+      'bg-woman-secondary': product && product.category === 'women\'s clothing',
+    }"
   >
     <div class="bg-white flex w-full h-[30vh] absolute bottom-0 z-0"></div>
     <div
       class="bg-white z-10 flex flex-col justify-center items-center w-[70vw] h-[80vh] p-10 rounded-xl shadow-xl"
     >
-      <!-- <div v-if="test === 'loading'">Loading...</div>
-      <div v-else-if="test === 'error'" class="text-red-500">
-        Error: {{ error }}
-      </div> -->
       <div v-if="isLoading">Loading...</div>
-      <div v-else-if="error" class="text-red-500">Error: {{ error }}</div>
-      <div v-else="product">
+
+      <div
+        v-else-if="error"
+        class="flex flex-col text-red-500 justify-center gap-5"
+      >
+        Error: {{ error }}
+        <div class="flex flex-row w-full justify-center gap-5">
+          <button
+            @click="prevProduct"
+            class="btn btn-secondary w-1/2"
+            :disabled="id === 1"
+          >
+            Prev
+          </button>
+          <button @click="nextProduct" class="btn btn-primary w-1/2">
+            Next
+          </button>
+        </div>
+      </div>
+
+      <div v-else-if="product">
         <div class="grid grid-cols-detail justify-between">
           <div class="flex justify-center items-center w-full">
             <img
@@ -61,8 +94,15 @@ const prevProduct = () => {
             />
           </div>
           <div class="grid grid-rows-detail">
-            <div class="flex flex-col justify-end">
-              <h3>{{ product.title }}</h3>
+            <div class="flex flex-col justify-end text-left">
+              <h3
+                :class="{
+                  'text-primary': product.category === 'men\'s clothing',
+                  'text-secondary': product.category !== 'men\'s clothing',
+                }"
+              >
+                {{ product.title }}
+              </h3>
             </div>
             <div
               class="flex flex-row justify-between items-center my-2 border-b"
@@ -73,27 +113,59 @@ const prevProduct = () => {
                 <div
                   v-for="index in 5"
                   :key="index"
-                  class="rounded-full border border-primary w-5 h-5"
-                  :class="{ 'bg-primary': index < product.rating.rate }"
+                  class="rounded-full border w-5 h-5"
+                  :class="{
+                    'bg-primary':
+                      index < product.rating.rate &&
+                      product.category === 'men\'s clothing',
+                    'bg-secondary':
+                      index < product.rating.rate &&
+                      product.category !== 'men\'s clothing',
+                  }"
                 ></div>
               </div>
             </div>
-            <div class="flex items-self-start">
+            <div class="flex items-center text-justify">
               <p>{{ product.description }}</p>
             </div>
-            <div class="flex flex-col justify-end my-2 border-t">
-              <h3>${{ product.price }}</h3>
+            <div class="flex flex-col justify-end border-t mt-2">
+              <h3
+                :class="{
+                  'text-primary': product.category === 'men\'s clothing',
+                  'text-secondary': product.category !== 'men\'s clothing',
+                }"
+              >
+                ${{ product.price }}
+              </h3>
             </div>
-            <div class="flex flex-row items-start gap-5">
-              <button
+            <div class="flex flex-row items-start mt-2 gap-5">
+              <!-- <button
                 @click="prevProduct"
                 class="btn btn-secondary w-2/5"
                 :disabled="id === 1"
               >
                 Prev
+              </button> -->
+              <button
+                class="w-2/5"
+                :class="
+                  product.category === 'men\'s clothing'
+                    ? 'btn btn-primary'
+                    : 'btn btn-secondary'
+                "
+              >
+                Buy Now
               </button>
-              <button @click="nextProduct" class="btn btn-primary w-2/5">
-                Next
+              <button
+                @click="nextProduct"
+                :class="
+                  product.category === 'men\'s clothing'
+                    ? 'btn btn-outline btn-primary'
+                    : 'btn btn-outline btn-secondary'
+                "
+                class="w-2/5"
+              >
+                Next Product
               </button>
             </div>
             <!-- <div class="flex flex-row gap-4 mt-4">
