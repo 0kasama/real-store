@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useFetch } from '@/composables/useFetch';
+import ProductNotFound from '@/components/ProductNotFound.vue';
 
 const id = ref(1);
 const endpoint = ref(`/products/${id.value}`);
@@ -15,7 +16,7 @@ watch(product, () => {
   if (product.value) {
     const category = product.value.category;
     if (category !== "men's clothing" && category !== "women's clothing") {
-      error.value = 'Invalid category: Product not found.';
+      error.value = 'This product is unavailable to show';
     }
   }
 });
@@ -65,24 +66,13 @@ const prevProduct = () => {
     >
       <div v-if="isLoading">Loading...</div>
 
-      <div
-        v-else-if="error"
-        class="flex flex-col text-red-500 justify-center gap-5"
-      >
-        Error: {{ error }}
-        <div class="flex flex-row w-full justify-center gap-5">
-          <button
-            @click="prevProduct"
-            class="btn btn-secondary w-1/2"
-            :disabled="id === 1"
-          >
-            Prev
-          </button>
-          <button @click="nextProduct" class="btn btn-primary w-1/2">
-            Next
-          </button>
-        </div>
-      </div>
+      <ProductNotFound
+        v-if="error"
+        :error="error"
+        :prevProduct="prevProduct"
+        :nextProduct="nextProduct"
+        :id="id"
+      />
 
       <div v-else-if="product">
         <div class="grid grid-cols-detail justify-between">
@@ -125,7 +115,7 @@ const prevProduct = () => {
                 ></div>
               </div>
             </div>
-            <div class="flex items-center text-justify">
+            <div class="flex items-start text-justify">
               <p>{{ product.description }}</p>
             </div>
             <div class="flex flex-col justify-end border-t mt-2">
