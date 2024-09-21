@@ -5,6 +5,7 @@ import ProductNotFound from '@/components/ProductNotFound.vue';
 import ProductLoading from '@/components/ProductLoading.vue';
 
 const id = ref(1);
+const maxId = 20;
 const endpoint = ref(`/products/${id.value}`);
 const { data: product, error, isLoading } = useFetch(endpoint);
 
@@ -23,35 +24,17 @@ watch(product, () => {
 });
 
 const nextProduct = () => {
-  id.value += 1;
-};
-
-const prevProduct = () => {
-  if (id.value > 1) {
-    id.value -= 1;
+  if (id.value >= maxId) {
+    id.value = 1;
+  } else {
+    id.value += 1;
   }
-};
-
-const test = ref(null);
-
-const testLoading = () => {
-  test.value = 'loading';
-  setTimeout(() => {
-    test.value = null;
-  }, 2000);
-};
-
-const testError = () => {
-  test.value = 'error';
-  setTimeout(() => {
-    test.value = null;
-  }, 2000);
 };
 </script>
 
 <template>
   <main
-    class="flex justify-center items-center min-h-screen relative"
+    class="flex bg-product-detail justify-center items-center min-h-screen relative"
     :class="{
       'bg-not-found':
         !product ||
@@ -70,7 +53,6 @@ const testError = () => {
       <ProductNotFound
         v-else-if="error"
         :error="error"
-        :prevProduct="prevProduct"
         :nextProduct="nextProduct"
         :id="id"
       />
@@ -130,13 +112,6 @@ const testError = () => {
               </h3>
             </div>
             <div class="flex flex-row items-start mt-2 gap-5">
-              <!-- <button
-                @click="prevProduct"
-                class="btn btn-secondary w-2/5"
-                :disabled="id === 1"
-              >
-                Prev
-              </button> -->
               <button
                 class="w-2/5"
                 :class="
@@ -159,14 +134,6 @@ const testError = () => {
                 Next Product
               </button>
             </div>
-            <!-- <div class="flex flex-row gap-4 mt-4">
-              <button @click="testLoading" class="btn btn-secondary">
-                Test Loading
-              </button>
-              <button @click="testError" class="btn btn-primary">
-                Test Error
-              </button>
-            </div> -->
           </div>
         </div>
       </div>

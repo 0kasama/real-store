@@ -1,9 +1,7 @@
 <script setup>
-import { defineProps } from 'vue';
 
 const props = defineProps({
   error: String,
-  prevProduct: Function,
   nextProduct: Function,
   id: Number,
 });
