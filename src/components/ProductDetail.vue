@@ -1,4 +1,5 @@
 <script setup>
+import ProductNotFound from './ProductNotFound.vue';
 import { ref, onMounted } from 'vue';
 
 const id = ref(1);
@@ -53,7 +54,14 @@ const nextProduct = () => {
     <div class="bg-main-under"></div>
     <div class="card">
       <div v-if="isLoading">Loading...</div>
-      <div v-else-if="error">{{ error }}</div>
+
+      <ProductNotFound
+        v-else-if="error"
+        :error="error"
+        :nextProduct="nextProduct"
+        :id="id"
+      />
+
       <div v-else="product" class="card-product">
         <div class="card-image">
           <img :src="product.image" :alt="product.title" />

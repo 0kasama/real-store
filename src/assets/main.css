@@ -218,3 +218,24 @@ p {
 .btn-outline:hover {
   color: white;
 }
+
+.not-found {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.sad-face {
+  position: absolute;
+  z-index: 0;
+}
+
+.not-found-description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
