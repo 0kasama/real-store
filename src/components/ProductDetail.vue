@@ -1,5 +1,6 @@
 <script setup>
 import ProductNotFound from './ProductNotFound.vue';
+import ProductLoading from './ProductLoading.vue';
 import { ref, onMounted } from 'vue';
 
 const id = ref(1);
@@ -53,7 +54,7 @@ const nextProduct = () => {
   >
     <div class="bg-main-under"></div>
     <div class="card">
-      <div v-if="isLoading">Loading...</div>
+      <ProductLoading v-if="isLoading" />
 
       <ProductNotFound
         v-else-if="error"
@@ -67,14 +68,16 @@ const nextProduct = () => {
           <img :src="product.image" :alt="product.title" />
         </div>
         <div class="card-details">
-          <h1
-            :class="{
-              'text-man': product.category === 'men\'s clothing',
-              'text-woman': product.category !== 'men\'s clothing',
-            }"
-          >
-            {{ product.title }}
-          </h1>
+          <div class="card-title">
+            <h1
+              :class="{
+                'text-man': product.category === 'men\'s clothing',
+                'text-woman': product.category !== 'men\'s clothing',
+              }"
+            >
+              {{ product.title }}
+            </h1>
+          </div>
           <div class="category">
             <h2>{{ product.category }}</h2>
             <div class="rating">
@@ -97,14 +100,16 @@ const nextProduct = () => {
           <div class="description">
             <p>{{ product.description }}</p>
           </div>
-          <h1
-            :class="{
-              'text-man': product.category === 'men\'s clothing',
-              'text-woman': product.category !== 'men\'s clothing',
-            }"
-          >
-            ${{ product.price }}
-          </h1>
+          <div class="product-price">
+            <h1
+              :class="{
+                'text-man': product.category === 'men\'s clothing',
+                'text-woman': product.category !== 'men\'s clothing',
+              }"
+            >
+              ${{ product.price }}
+            </h1>
+          </div>
           <div class="button">
             <button
               class="btn"
