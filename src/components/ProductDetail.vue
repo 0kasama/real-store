@@ -1,13 +1,25 @@
 <script setup>
 import ProductNotFound from './ProductNotFound.vue';
 import ProductLoading from './ProductLoading.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 const id = ref(1);
-const maxId = 20;
+const totalProduct = ref(20);
+console.log('total',totalProduct);
 const product = ref(null);
 const error = ref(null);
 const isLoading = ref(true);
+const rating = computed(() => product.value?.rating?.rate || 0);
+
+const getTotalProducts = async () => {
+  try {
+    const response = await fetch('https://fakestoreapi.com/products');
+    const products = await response.json();
+    totalProduct.value = products.length;
+  } catch (err) {
+    throw err;
+  }
+};
 
 const fetchData = async () => {
   isLoading.value = true;
@@ -32,10 +44,13 @@ const fetchData = async () => {
   }
 };
 
-onMounted(fetchData);
+onMounted(async () => {
+  await getTotalProducts();
+  fetchData();
+});
 
 const nextProduct = () => {
-  if (id.value >= maxId) {
+  if (id.value >= totalProduct.value) {
     id.value = 1;
   } else {
     id.value += 1;
@@ -81,18 +96,16 @@ const nextProduct = () => {
           <div class="category">
             <h2>{{ product.category }}</h2>
             <div class="rating">
-              <h2>{{ product.rating.rate }} / 5</h2>
+              <h2>{{ rating }} / 5</h2>
               <div
                 v-for="index in 5"
                 :key="index"
                 class="circle"
                 :class="{
                   'circle-man':
-                    index < product.rating.rate &&
-                    product.category === 'men\'s clothing',
+                    index < rating && product.category === 'men\'s clothing',
                   'circle-woman':
-                    index < product.rating.rate &&
-                    product.category !== 'men\'s clothing',
+                    index < rating && product.category !== 'men\'s clothing',
                 }"
               ></div>
             </div>
